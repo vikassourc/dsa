@@ -30,7 +30,7 @@ public:
             
             int x=prefixGcd[left];
             int y=prefixGcd[right];
-            sum=sum+gcd(prefixGcd[left],prefixGcd[right]);
+            sum+=gcd(prefixGcd[left],prefixGcd[right]);
             left++;
             right--;
         }
