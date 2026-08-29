@@ -4,48 +4,51 @@ public:
     int fun(vector<int>& cuts, int i, int j,
             vector<vector<int>>& dp)
     {
-        // No cut possible
-        if(i + 1 == j)
+        if(i > j)
             return 0;
 
         if(dp[i][j] != -1)
             return dp[i][j];
 
-        int ans = INT_MAX;
+        int res = INT_MAX;
 
-        for(int k = i + 1; k < j; k++)
+        for(int k = i; k <= j; k++)
         {
-            int c1 = fun(cuts, i, k, dp);
-            int c2 = fun(cuts, k, j, dp);
+            int cost = cuts[j + 1] - cuts[i - 1];
 
-            int cost = cuts[j] - cuts[i];
+            int c1 = fun(cuts, i, k - 1, dp);
 
-            int c3 = cost + c1 + c2;
+            int c2 = fun(cuts, k + 1, j, dp);
 
-            ans = min(ans, c3);
+            int r = cost + c1 + c2;
+
+            res = min(res, r);
         }
 
-        return dp[i][j] = ans;
+        return dp[i][j] = res;
     }
 
 
-    int minCost(int n, vector<int>& cuts) {
+    int minCost(int n, vector<int>& c)
+    {
+        vector<int> cuts;
 
         cuts.push_back(0);
+
+        for(int i = 0; i < c.size(); i++)
+        {
+            cuts.push_back(c[i]);
+        }
+
         cuts.push_back(n);
 
         sort(cuts.begin(), cuts.end());
 
         int s = cuts.size();
 
-        vector<vector<int>> dp(s);
+        vector<vector<int>> dp(s,
+                               vector<int>(s, -1));
 
-        for(int i = 0; i < s; i++)
-        {
-            vector<int> t(s, -1);
-            dp[i] = t;
-        }
-
-        return fun(cuts, 0, s - 1, dp);
+        return fun(cuts, 1, s - 2, dp);
     }
 };
