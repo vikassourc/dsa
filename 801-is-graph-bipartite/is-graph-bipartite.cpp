@@ -7,7 +7,7 @@ public:
         for(int j=0;j<a[node].size();j++)
         {
             int neigh=a[node][j];
-            if(colors[neigh]!=-1 && colors[neigh]==c)//contradiction
+            if(colors[neigh]!=-1 && colors[neigh]==c)
             {
                 res=false;
             }
@@ -15,10 +15,10 @@ public:
             {
                 dfs(a,neigh,1-c,colors);
             }
+            
         }
         return;
     }
-
     bool isBipartite(vector<vector<int>>& graph) {
         int n=graph.size();
         vector<int>colors(n,-1);
