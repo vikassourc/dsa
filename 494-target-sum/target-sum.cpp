@@ -1,57 +1,47 @@
 class Solution {
 public:
-    int findTargetSumWays(vector<int>& nums, int target) {
+    int countsubsetsum(vector<int>& arr, int target)
+    {
+        int n = arr.size();
 
-        int total=0;
-        for(int i=0;i<nums.size();i++)
+        vector<vector<int>> t(n+1, vector<int>(target+1, 0));
+
+        for(int i = 0; i <= n; i++)
         {
-            total=total+nums[i];
+            t[i][0] = 1;
         }
 
-        if(abs(target)>total)
+        for(int i = 1; i <= n; i++)
         {
-            return 0;
-        }
-
-        if((total+target)%2!=0)
-        {
-            return 0;
-        }
-
-        int sum=(total+target)/2;
-
-        int n=nums.size();
-
-        vector<vector<int>> dp(n+1);
-
-        for(int i=0;i<=n;i++)
-        {
-            vector<int> t(sum+1,-1);
-            dp[i]=t;
-        }
-
-        for(int j=0;j<=sum;j++)
-        {
-            dp[n][j]=0;
-        }
-
-        dp[n][0]=1;
-
-        for(int i=n-1;i>=0;i--)
-        {
-            for(int j=0;j<=sum;j++)
+            for(int j = 0; j <= target; j++)
             {
-                if(nums[i]>j)
+                if(arr[i-1] <= j)
                 {
-                    dp[i][j]=dp[i+1][j];
+                    t[i][j] = t[i-1][j-arr[i-1]] + t[i-1][j];
                 }
                 else
                 {
-                    dp[i][j]=dp[i+1][j-nums[i]] + dp[i+1][j];
+                    t[i][j] = t[i-1][j];
                 }
             }
         }
 
-        return dp[0][sum];
+        return t[n][target];
+    }
+    int findTargetSumWays(vector<int>& nums, int target) {
+        int n=nums.size();
+        int sum=0;
+        for(int i=0;i<n;i++)
+        {
+            sum+=nums[i];
+        }
+        if(abs(target)>sum||(target+sum)%2!=0)
+        {
+            return 0;
+        }
+        int s1=(target+sum)/2;
+        return countsubsetsum(nums,s1);
+
+        
     }
 };
